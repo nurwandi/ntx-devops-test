@@ -14,8 +14,8 @@ const server = http.createServer(handleRequest);
 export { server, handleRequest };
 
 // Ensure server starts only if this is the entry point
-if (import.meta.url === new URL('file:///D:/PLAYGROUND/ntx-devops-test/index.js').href) {
-  server.listen(3000, () => {
+if (import.meta.url.endsWith('/index.js')) {
+  server.listen(3000, '0.0.0.0', () => {
     console.log('Server is running on port 3000');
   });
 }
