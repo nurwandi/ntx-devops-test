@@ -72,4 +72,11 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            script {
+                echo "The servers are successfully running and accessible via the Load Balancer: http://ntx-devops-test-alb-1605014626.us-east-2.elb.amazonaws.com/"
+            }
+        }
+    }
 }
