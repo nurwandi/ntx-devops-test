@@ -12,7 +12,7 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Cloning repository on Node Server 1...'
-                                    sh './00.clone_repository.sh'
+                                    sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }
@@ -20,7 +20,7 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Testing app on Node Server 1...'
-                                    sh './01.testing_local_app.sh'
+                                    sh 'Jenkins/01.testing_local_app.sh'
                                 }
                             }
                         }
@@ -28,8 +28,8 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Build and Run Docker image on Node Server 1...'
-                                    sh './02.docker_installation.sh'
-                                    sh './03.docker_run.sh'
+                                    sh 'Jenkins/02.docker_installation.sh'
+                                    sh 'Jenkins/03.docker_run.sh'
                                 }
                             }
                         }
@@ -44,7 +44,7 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Cloning repository on Node Server 2...'
-                                    sh './00.clone_repository.sh'
+                                    sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }
@@ -52,7 +52,7 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Testing app on Node Server 2...'
-                                    sh './01.testing_local_app.sh'
+                                    sh 'Jenkins/01.testing_local_app.sh'
                                 }
                             }
                         }
@@ -60,8 +60,8 @@ pipeline {
                             steps {
                                 script {
                                     echo 'Build and Run Docker image on Node Server 2...'
-                                    sh './02.docker_installation.sh'
-                                    sh './03.docker_run.sh'
+                                    sh 'Jenkins/02.docker_installation.sh'
+                                    sh 'Jenkins/03.docker_run.sh'
                                 }
                             }
                         }
