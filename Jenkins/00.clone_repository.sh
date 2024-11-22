@@ -9,7 +9,6 @@ FOLDER_NAME="ntx-devops-test"
 echo "Cloning repository $REPO_URL into folder $FOLDER_NAME..."
 git clone "$REPO_URL" "$FOLDER_NAME"
 
-# Periksa apakah proses cloning berhasil
 if [ $? -eq 0 ]; then
     echo "Cloning is successful."
     
