@@ -1,4 +1,5 @@
 #!/bin/bash
+pwd
 
 TIMESTAMP=$(date +"%m.%d.%Y")
 

@@ -1,6 +1,7 @@
 # https://github.com/nurwandi/ntx-devops-test.git
 
 #!/bin/bash
+pwd
 
 REPO_URL="https://github.com/nurwandi/ntx-devops-test.git"
 FOLDER_NAME="ntx-devops-test"

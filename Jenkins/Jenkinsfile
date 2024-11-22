@@ -13,7 +13,7 @@ pipeline {
                                 script {
                                     echo 'Cloning repository on Node Server 1...'
                                     sh 'chmod +x Jenkins/*'
-                                    sh 'Jenkins/00.clone_repository.sh'
+                                    // sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }
@@ -46,7 +46,7 @@ pipeline {
                                 script {
                                     sh 'chmod +x Jenkins/*'
                                     echo 'Cloning repository on Node Server 2...'
-                                    sh 'Jenkins/00.clone_repository.sh'
+                                    // sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }

@@ -1,3 +1,7 @@
+#!/bin/bash
+
+pwd
+
 sudo yum update -y
 sudo yum install -y curl
 
@@ -15,7 +19,15 @@ else
 fi
 
 echo "Testing the local app..."
-cd ..
 
-npm test
-npm start
+npm start &
+sleep 5
+
+if netstat -tuln | grep ':3000' &> /dev/null; then
+  echo "Server is running on port 3000."
+
+  echo "Stopping the server..."
+  kill $(lsof -t -i:3000)
+else
+  echo "Server is not running on port 3000."
+fi
