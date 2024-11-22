@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Example repo for DevOps test",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "mocha test --exit"

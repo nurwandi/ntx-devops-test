@@ -1,10 +1,9 @@
-const { expect } = require('chai');
-const supertest = require('supertest');
-const { server, handleRequest } = require('../index');
-const os = require('os');
+import { expect } from 'chai';
+import supertest from 'supertest';
+import { server, handleRequest } from '../index.js';
+import os from 'os';
 
 describe('Node.js Application Tests', () => {
-  // Test the response from the HTTP server
   it('should respond with the correct message', (done) => {
     const hostname = os.hostname();
     supertest(server)
