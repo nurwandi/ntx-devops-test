@@ -1,0 +1,73 @@
+pipeline {
+    agent none
+    stages {
+        stage('Parallel Execution') {
+            parallel {
+                stage('Node Server 1') {
+                    agent {
+                        label 'node-server-1'
+                    }
+                    stages {
+                        stage('CLONE REPOSITORY') {
+                            steps {
+                                script {
+                                    echo 'Cloning repository on Node Server 1...'
+                                    sh './00.clone_repository.sh'
+                                }
+                            }
+                        }
+                        stage('TEST THE LOCAL APP') {
+                            steps {
+                                script {
+                                    echo 'Testing app on Node Server 1...'
+                                    sh './01.testing_local_app.sh'
+                                }
+                            }
+                        }
+                        stage('BUILD AND RUN DOCKER IMAGE') {
+                            steps {
+                                script {
+                                    echo 'Build and Run Docker image on Node Server 1...'
+                                    sh './02.docker_installation.sh'
+                                    sh './03.docker_run.sh'
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Node Server 2') {
+                    agent {
+                        label 'node-server-2'
+                    }
+                    stages {
+                        stage('CLONE REPOSITORY') {
+                            steps {
+                                script {
+                                    echo 'Cloning repository on Node Server 2...'
+                                    sh './00.clone_repository.sh'
+                                }
+                            }
+                        }
+                        stage('TEST THE LOCAL APP') {
+                            steps {
+                                script {
+                                    echo 'Testing app on Node Server 2...'
+                                    sh './01.testing_local_app.sh'
+                                }
+                            }
+                        }
+                        stage('BUILD AND RUN DOCKER IMAGE') {
+                            steps {
+                                script {
+                                    echo 'Build and Run Docker image on Node Server 2...'
+                                    sh './02.docker_installation.sh'
+                                    sh './03.docker_run.sh'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
