@@ -1,0 +1,3 @@
+[submodule "Jenkins"]
+    path = Jenkins
+    url = https://github.com/nurwandi/ntx-devops-test-jenkins.git
