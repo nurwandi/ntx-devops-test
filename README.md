@@ -90,7 +90,7 @@ I provisioned Jenkins manually without Infrastructure as Code (CloudFormation) t
 <img src="https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-22+063433.png" alt="." style="margin-bottom: 20px;" />
 <img src="https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-22+074408.png" alt="." />
 
-Once Jenkins was running, I installed essential plugins such as **Git**, **EC2**, and **Cloud**. I added SSH credentials for GitHub to facilitate project cloning, attaching the **IAM access key** to the Jenkins credentials. I also ensured that both agents from the two EC2 instances were running.
+Once Jenkins was running, I installed essential plugins such as **Git**, **EC2**, **Parameterized Trigger**, and **Cloud**. I added SSH credentials for GitHub to facilitate project cloning, attaching the **IAM access key** to the Jenkins credentials. I also ensured that both agents from the two EC2 instances were running.
 
 ### 6. Creating Modular Scripts
 
@@ -109,21 +109,29 @@ sh 'chmod +x Jenkins/*'
 
 to ensure we had permission to run all scripts in the pipeline.
 
+Why do I make `Jenkins` folder to be a submodule? It will become easier to debug and to manage. Especially when it comes to the workspace management in the Jenkins Agent.
+
 Goals:
 - ✅ Modular scripts
 
-### 7. Fault Tolerance on Jenkins Master
+### 7. Migrating Jenkins Master to AWS Lightsail
 
-to-do:
-- implement ASG on jenkins master instance
+At this stage, I decided to move the Jenkins Master to `AWS Lightsail`. Why choose AWS Lightsail? Because its 90-day free tier offers higher specs compared to the t2.micro instance available in EC2. This is important as the Jenkins Master needs to remain stable for low workload tasks.
 
-consideration:
-- cost effective, for small workload
-- only running one instance
+Consideration:
+- Cost effective, for small workload
+- Only running one instance
 
 ### 8. Web-hook
 
-to-do
+This is the most challenging stage. I used the `Generic Webhook Trigger` plugin. Using this plugin requires registering the Jenkins URL in the webhook on GitHub. To check if the URL is receiving requests, you can view the `Recent Deliveries` tab.
+
+![.](https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-25+145631.png)
+
+<img src="https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-25+153140.png" width="100%"/>
+
+- The idea is that users can input parameters into `BRANCH_NAME` in the Jenkins UI. Pipeline will trigger the exact same parameter as what the user input. 
+- If the pipeline is triggered via a webhook, the value of `BRANCH_NAME` will be taken from the user’s branch listed in the `payload`. For example, if the user commits and pushes to the branch: feature/testing, the pipeline will run and execute that feature/testing branch.
 
 ### 9. Finalization
 
@@ -145,7 +153,7 @@ Goals:
 - ✅ The application must respond with:
 `Hi there! I'm being served from {hostname}!`
 ---
-- The Jenkins pipeline can be found at: [18.222.136.115:8080/job/ntx-devops-test-ci/](http://18.222.136.115:8080/job/ntx-devops-test-ci/)
+- The Jenkins pipeline can be found at: [http://3.128.170.47:8080/job/ntx-devops-test-ci/](http://3.128.170.47:8080/job/ntx-devops-test-ci/)
 - Load Balancer: [ntx-devops-test-alb-1605014626.us-east-2.elb.amazonaws.com/](http://ntx-devops-test-alb-1605014626.us-east-2.elb.amazonaws.com/)
-- EC2 Instance Node-Server-1: [18.218.170.152:3000/](http://18.218.170.152:3000/)
-- EC2 Instance Node-Server-2: [3.141.36.115:3000/](http://3.141.36.115:3000/)
+- EC2 Instance Node-Server-1: [18.116.34.8:3000/](http://18.116.34.8:3000/)
+- EC2 Instance Node-Server-2: [18.117.144.187:3000/](http://18.117.144.187:3000/)
