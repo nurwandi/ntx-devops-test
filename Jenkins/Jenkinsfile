@@ -1,9 +1,25 @@
 pipeline {
     agent none
     parameters {
-        string defaultValue: 'main', description: 'Please fill your branch target.', name: 'BRANCH_NAME', trim: true
+        string description: 'Please fill your branch target.', name: 'BRANCH_NAME', trim: true
     }
     stages {
+        stage('Verify Branch Name') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH) {
+                        echo "Job triggered by Git. Detected branch: ${env.GIT_BRANCH}"
+                        def branch = "${env.GIT_BRANCH}"
+                        def webhookBranch = branch.replaceFirst("origin/", "")
+                        env.BRANCH_NAME = webhookBranch
+                        echo "Branch after cleanup: ${env.BRANCH_NAME}"
+                    } else {
+                        echo "No GIT_BRANCH detected. Using input parameter BRANCH_NAME: ${params.BRANCH_NAME}"
+                        env.BRANCH_NAME = params.BRANCH_NAME
+                    }
+                }
+            }
+        }
         stage('Parallel Execution') {
             parallel {
                 stage('Node Server 1') {
@@ -16,8 +32,8 @@ pipeline {
                                 script {
                                     echo 'Cloning repository on Node Server 1...'
                                     sh 'chmod +x Jenkins/*'
-                                    sh 'git checkout ${params.BRANCH_NAME}'
-                                    // sh 'Jenkins/00.clone_repository.sh'
+                                    sh 'git checkout ${env.BRANCH_NAME}'
+                                    sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }
@@ -50,8 +66,8 @@ pipeline {
                                 script {
                                     echo 'Cloning repository on Node Server 2...'
                                     sh 'chmod +x Jenkins/*'
-                                    sh 'git checkout ${params.BRANCH_NAME}'
-                                    // sh 'Jenkins/00.clone_repository.sh'
+                                    sh 'git checkout ${env.BRANCH_NAME}'
+                                    sh 'Jenkins/00.clone_repository.sh'
                                 }
                             }
                         }

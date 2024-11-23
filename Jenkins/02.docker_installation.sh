@@ -1,5 +1,11 @@
 #!/bin/bash
+
+. /00.clone_repository.sh
+
 pwd
+
+cd "$NODE_APP_DIRECTORY" || exit
+echo "Now inside the directory: $NODE_APP_DIRECTORY"
 
 TIMESTAMP=$(date +"%m.%d.%Y")
 

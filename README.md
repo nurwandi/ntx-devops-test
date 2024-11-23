@@ -90,7 +90,7 @@ I provisioned Jenkins manually without Infrastructure as Code (CloudFormation) t
 <img src="https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-22+063433.png" alt="." style="margin-bottom: 20px;" />
 <img src="https://hadith-of-the-day-replication-9162024.s3.us-east-1.amazonaws.com/gif/Screenshot+2024-11-22+074408.png" alt="." />
 
-Once Jenkins was running, I installed essential plugins such as **Git**, **EC2**, and **Cloud**. I added SSH credentials for GitHub to facilitate project cloning, attaching the **IAM access key** to the Jenkins credentials. I also ensured that both agents from the two EC2 instances were running.
+Once Jenkins was running, I installed essential plugins such as **Git**, **EC2**, **Parameterized Trigger**, and **Cloud**. I added SSH credentials for GitHub to facilitate project cloning, attaching the **IAM access key** to the Jenkins credentials. I also ensured that both agents from the two EC2 instances were running.
 
 ### 6. Creating Modular Scripts
 
