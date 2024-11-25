@@ -113,7 +113,7 @@ Why do I make `Jenkins` folder to be a submodule? It will become easier to debug
 
 ___
 
-#### Pipeline Breakdown
+### Pipeline Breakdown
 
 #### **Stage 1: Verify Branch Name**
 - This stage checks if the job was triggered by a webhook. If a `WEBHOOK_BRANCH` environment variable is present, it extracts the branch name from it.
@@ -132,10 +132,10 @@ This stage runs two sub-stages in parallel on two different Node servers:
   2. **TEST THE LOCAL APP**: Runs the local application testing on `node-server-2`.
   3. **BUILD AND RUN DOCKER IMAGE**: Builds and runs the Docker image on `node-server-2`.
 
-### 3. Post Section
+#### 3. Post Section
 - If the pipeline completes successfully, a message is displayed indicating that the servers are running and accessible via a Load Balancer URL. The URL is provided in the message for easy access to the application.
 
-## Key Features
+#### Key Features
 - **Branch Handling**: The pipeline dynamically selects the branch to build, either from a webhook or from the user input parameter.
 - **Parallel Execution**: Tasks for `node-server-1` and `node-server-2` are executed in parallel, reducing overall build time.
 - **Post Success Message**: After the deployment is successful, a message with the Load Balancer URL is displayed.
