@@ -96,7 +96,7 @@ Once Jenkins was running, I installed essential plugins such as **Git**, **EC2**
 
 I created several scripts inside the `Jenkins/` folder that Jenkins would run and execute:
 
-- `00.clone_repository.sh`: Contains the command to clone the repository (optional, as I used the project directly from the workspace).
+- `00.clone_repository.sh`: Contains the command to clone the repository.
 - `01.testing_local_app.sh`: Installs Node.js and tests the local app running on port 3000.
 - `02.docker_installation.sh`: Builds the Docker image and ensures the Docker daemon is activated.
 - `03.docker_run.sh`: Checks the Docker version and runs the Docker image built from the previous script.
@@ -104,12 +104,43 @@ I created several scripts inside the `Jenkins/` folder that Jenkins would run an
 In the same folder, I also created a `Jenkinsfile`. For execution, I implemented parallel execution targeting the two Jenkins agents from our two instances. I ran the pipeline multiple times to adjust the scripts, especially regarding path directories. I modified the bash scripts to include soft checks to verify if the server and Docker were already installed. Additionally, I added the command:
 
 ```
-sh 'chmod +x Jenkins/*'
+sh 'chmod -R 755 $WORKSPACE'
 ```
 
 to ensure we had permission to run all scripts in the pipeline.
 
 Why do I make `Jenkins` folder to be a submodule? It will become easier to debug and to manage. Especially when it comes to the workspace management in the Jenkins Agent.
+
+___
+
+#### Pipeline Breakdown
+
+#### **Stage 1: Verify Branch Name**
+- This stage checks if the job was triggered by a webhook. If a `WEBHOOK_BRANCH` environment variable is present, it extracts the branch name from it.
+- If no webhook is detected, it uses the `BRANCH_NAME` parameter provided by the user.
+
+#### **Stage 2: Parallel Execution**
+This stage runs two sub-stages in parallel on two different Node servers:
+
+- **Node Server 1**:
+  1. **CLONE REPOSITORY**: Clones the repository on `node-server-1`.
+  2. **TEST THE LOCAL APP**: Runs the local application testing on `node-server-1`.
+  3. **BUILD AND RUN DOCKER IMAGE**: Builds and runs the Docker image on `node-server-1`.
+
+- **Node Server 2**:
+  1. **CLONE REPOSITORY**: Clones the repository on `node-server-2`.
+  2. **TEST THE LOCAL APP**: Runs the local application testing on `node-server-2`.
+  3. **BUILD AND RUN DOCKER IMAGE**: Builds and runs the Docker image on `node-server-2`.
+
+### 3. Post Section
+- If the pipeline completes successfully, a message is displayed indicating that the servers are running and accessible via a Load Balancer URL. The URL is provided in the message for easy access to the application.
+
+## Key Features
+- **Branch Handling**: The pipeline dynamically selects the branch to build, either from a webhook or from the user input parameter.
+- **Parallel Execution**: Tasks for `node-server-1` and `node-server-2` are executed in parallel, reducing overall build time.
+- **Post Success Message**: After the deployment is successful, a message with the Load Balancer URL is displayed.
+
+This pipeline automates the entire process of cloning the repository, testing the app locally, and running the Docker containers on two separate Node servers in parallel.
 
 Goals:
 - ✅ Modular scripts
@@ -155,5 +186,13 @@ Goals:
 ---
 - The Jenkins pipeline can be found at: [http://3.128.170.47:8080/job/ntx-devops-test-ci/](http://3.128.170.47:8080/job/ntx-devops-test-ci/)
 - Load Balancer: [ntx-devops-test-alb-1605014626.us-east-2.elb.amazonaws.com/](http://ntx-devops-test-alb-1605014626.us-east-2.elb.amazonaws.com/)
-- EC2 Instance Node-Server-1: [18.116.34.8:3000/](http://18.116.34.8:3000/)
-- EC2 Instance Node-Server-2: [18.117.144.187:3000/](http://18.117.144.187:3000/)
+- EC2 Instance Node-Server-1: [18.223.211.134:3000](http://18.223.211.134:3000/)
+- EC2 Instance Node-Server-2: [18.191.206.18:3000](http://18.191.206.18:3000/)
+
+## Test This Infrastructure
+
+1. **Clone the repository, make changes, and push.**
+2. **Check the triggered pipeline**:  
+   Visit [http://3.128.170.47:8080/job/ntx-devops-test-ci/](http://3.128.170.47:8080/job/ntx-devops-test-ci/) to see your triggered pipeline.
+
+Happy testing! And wish me luck🚀 HAHAHAHA 😂
